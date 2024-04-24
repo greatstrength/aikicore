@@ -57,6 +57,9 @@ class FeatureHandler():
         # Get header data and add to message context.
         context.headers = header_mapping_func(request, app_context, **kwargs)
 
+        # Get the feature group
+        feature_group = kwargs.get('feature_group')
+
         for function in self.feature_config.functions:
 
             if debug: print('Executing function: "function": "{}"'.format(function.to_primitive()))
@@ -65,15 +68,14 @@ class FeatureHandler():
 
             # Set data mapping and service container for feature function
             try:
-                if function.data_mapping:
-                    if debug: print('Perform data mapping: "mapping": "{}"'.format(function.data_mapping))
-                    data_mapping = getattr(
-                        import_module(DATA_MAPPER_PATH.format(app_context.interface)), 
-                        function.data_mapping
-                    )
-                    if debug: print('Performing data mapping for following request: "mapping": "{}", "request": "{}", params: "{}"'.format(function.data_mapping, request, function.params))
-                    context.data = data_mapping(context, request, app_context, **function.params, **kwargs)
-                    if debug: print('Data mapping complete: "mapping": "{}", "data": "{}"'.format(function.data_mapping, context.data.to_primitive()))
+                data_mapping = function.data_mapping if function.data_mapping else feature_group.data_mapping
+                if debug: print('Perform data mapping: "mapping": "{}"'.format(data_mapping))
+                data_mapping_func = getattr(
+                    import_module(DATA_MAPPER_PATH.format(app_context.interface)),
+                    data_mapping)
+                if debug: print('Performing data mapping for following request: "mapping": "{}", "request": "{}", params: "{}"'.format(function.data_mapping, request, function.params))
+                context.data = data_mapping_func(context, request, app_context, **function.params, **kwargs)
+                if debug: print('Data mapping complete: "mapping": "{}", "data": "{}"'.format(function.data_mapping, context.data.to_primitive()))
                 # Request model state validation
                 try:
                     context.data.validate()

@@ -20,7 +20,7 @@ class FeatureConfiguration(Model):
                 super().__init__(raw_data=raw_data)
 
         class FunctionConfiguration(Model):
-            name = t.StringType(required=True)
+            name = t.StringType()
             function_path = t.StringType(required=True)
             data_mapping = t.StringType()
             use_services = t.StringType()
@@ -34,6 +34,7 @@ class FeatureConfiguration(Model):
         log_params = t.DictType(t.StringType(), default={})
 
 class FeatureGroupConfiguration(Model):
+    data_mapping = t.StringType()
     features = t.DictType(t.ModelType(FeatureConfiguration), default={})
 
 class AppFeaturesConfiguration(Model):
@@ -63,8 +64,7 @@ class AppConfigurationReader():
         self.app_config_filepath = app_config_filepath
 
     def load_config(self, app_name: str, **kwargs) -> AppConfiguration:
-        app_name, kwargs
-        pass
+        raise NotImplementedError()
 
 
 def load_app_config_reader(app_config_filepath: str) -> AppConfigurationReader:
