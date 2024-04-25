@@ -50,7 +50,7 @@ class AppConfiguration(Model):
     errors = t.DictType(t.ModelType(ErrorConfiguration), default={})
 
 class InterfaceConfiguration(Model):
-    type = t.StringType(required=True, choices=['cli', 'rest_flask'])
+    type = t.StringType(required=True)
 
 class AppConfiguration(Model):
     errors = t.DictType(t.ModelType(ErrorConfiguration), default={})

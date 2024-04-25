@@ -36,6 +36,14 @@ class ErrorManager():
             setattr(self, error.error_name, error)
         except:
             return
+        
+class DomainError(Exception):
+
+    def __init__(self, model: str, method: str, code: str, *data):
+        self.model = model
+        self.method = method
+        self.code = code
+        self.data = data
 
 class AppError(Exception):
 
