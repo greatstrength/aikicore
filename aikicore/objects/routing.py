@@ -1,13 +1,10 @@
 from schematics import types as t, Model
 from schematics.exceptions import DataError
 
-from . import activity
-from .config import FeatureConfiguration
+from ..constants import *
+from ..config import FeatureConfiguration
 from .error import *
 
-HEADER_MAPPER_PATH = 'app.interfaces.{}.mappers.header'
-DATA_MAPPER_PATH = 'app.interfaces.{}.mappers.command'
-SERVICES_MAPPER_PATH = 'app.interfaces.services'
 
 class MessageContext():
 
@@ -108,7 +105,7 @@ class FeatureHandler():
             # Log activity
             if function.log_activity:
                 if debug: print('Logging activity for function: {}'.format(module_path))
-                activity.handle(context)
+                import_module(ACTIVITY_HANDLER_PATH).handle(context)
 
             if debug: print('Finishing function: {}'.format(module_path))
         
