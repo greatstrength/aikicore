@@ -29,6 +29,7 @@ class FeatureConfiguration(Model):
 
         name = t.StringType(required=True)
         use_role = t.StringType()
+        data_mapping = t.StringType()
         header_mapping = t.StringType()
         functions = t.ListType(t.ModelType(FunctionConfiguration), default=[])
         log_params = t.DictType(t.StringType(), default={})
